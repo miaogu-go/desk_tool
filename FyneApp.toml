@@ -1,0 +1,8 @@
+Website = "https://github.com/miaogu-go"
+
+[Details]
+Icon = "app.png"
+Name = "tools"
+ID = "pu.qiang@qq.com"
+Version = "1.0.0"
+Build = 3
