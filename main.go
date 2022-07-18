@@ -3,17 +3,17 @@ package main
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/flopp/go-findfont"
-	"image/color"
 	"log"
 	"os"
 	"strings"
 	"tool/data"
 )
+
+type SetRightContHandle func(cont data.Content)
 
 func main() {
 	mainApp := app.New()
@@ -33,79 +33,51 @@ func makeMainWindow(mainApp fyne.App) fyne.Window {
 	//设置主菜单
 	mainWindow.SetMainMenu(makeMainMenu(mainApp, mainWindow))
 
-	//todo left tree
-	//text := canvas.NewText("xxxx", color.Black)
-	text2 := canvas.NewText("xxxx", color.Black)
+	rightCont := container.NewMax()
+	setRightCont := func(cont data.Content) {
+		view := cont.View(mainWindow)
+		rightCont.Objects = []fyne.CanvasObject{view}
+		rightCont.Refresh()
+	}
 
-	split := container.NewHSplit(makeMenuTree(), text2)
+	rightContent := container.NewBorder(nil, nil, nil, nil, rightCont)
+	split := container.NewHSplit(makeMenuTree(setRightCont), rightContent)
 
 	mainWindow.SetContent(split)
 
 	return mainWindow
 }
 
-func makeMenuTree() fyne.CanvasObject {
+func makeMenuTree(contHandle SetRightContHandle) fyne.CanvasObject {
 	tree := &widget.Tree{
 		BaseWidget: widget.BaseWidget{},
-		//Root:       "",
+		Root:       "",
 		ChildUIDs: func(uid string) (c []string) {
-			c = data.MenuTree[uid]
+			c = data.Menus[uid]
 			return c
 		},
 		CreateNode: func(branch bool) (o fyne.CanvasObject) {
-			return widget.NewLabel("tree123456")
+			return widget.NewLabel("tree")
 		},
 		IsBranch: func(uid string) (ok bool) {
-			children, ok := data.MenuTree[uid]
+			children, ok := data.Menus[uid]
 			return ok && len(children) > 0
 		},
 		OnBranchClosed: nil,
 		OnBranchOpened: nil,
 		OnSelected: func(uid widget.TreeNodeID) {
-			log.Println(uid)
+			content, ok := data.Contents[uid]
+			if !ok {
+				log.Println("content is not exist", uid)
+				return
+			}
+			contHandle(content)
 		},
 		OnUnselected: nil,
 		UpdateNode: func(uid widget.TreeNodeID, branch bool, node fyne.CanvasObject) {
 			node.(*widget.Label).SetText(uid)
 		},
 	}
-	/*data := map[string][]string{
-		"":  {"A"},
-		"A": {"B", "D", "H", "J", "L", "O", "P", "S", "V"},
-		"B": {"C"},
-		"C": {"abc"},
-		"D": {"E"},
-		"E": {"F", "G"},
-		"F": {"adef"},
-		"G": {"adeg"},
-		"H": {"I"},
-		"I": {"ahi"},
-		"O": {"ao"},
-		"P": {"Q"},
-		"Q": {"R"},
-		"R": {"apqr"},
-		"S": {"T"},
-		"T": {"U"},
-		"U": {"astu"},
-		"V": {"W"},
-		"W": {"X"},
-		"X": {"Y"},
-		"Y": {"Z"},
-		"Z": {"avwxyz"},
-	}
-
-	tree := widget.NewTreeWithStrings(data)
-	tree.OnSelected = func(id string) {
-		fmt.Println("Tree node selected:", id)
-	}
-	tree.OnUnselected = func(id string) {
-		fmt.Println("Tree node unselected:", id)
-	}
-	tree.OpenBranch("A")
-	tree.OpenBranch("D")
-	tree.OpenBranch("E")
-	tree.OpenBranch("L")
-	tree.OpenBranch("M")*/
 
 	return container.NewBorder(nil, nil, nil, nil, tree)
 }

@@ -2,29 +2,31 @@ package data
 
 import (
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/widget"
 )
+
+type ScreenRenderHandle func(w fyne.Window) fyne.CanvasObject
 
 type Content struct {
 	Title, Intro string
-	View         func(w fyne.Window) fyne.CanvasObject
+	View         ScreenRenderHandle
 	SupportWeb   bool
 }
 
 var (
 	Contents = map[string]Content{
-		"welcome": {
-			Title: "welcome",
-			Intro: "this is welcome",
-			View: func(w fyne.Window) fyne.CanvasObject {
-				widgetLabel := widget.NewLabel("test")
-				return widgetLabel
-			},
+		"introduce": {
+			Title:      "Introduce",
+			Intro:      "this is welcome",
+			View:       _welcome,
 			SupportWeb: true,
+		},
+		"unixTime": {
+			Title: "UnixTime",
+			View:  _unixTime,
 		},
 	}
 
-	MenuTree = map[string][]string{
-		"": {"welcome"},
+	Menus = map[string][]string{
+		"": {"introduce", "unixTime"},
 	}
 )
