@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
@@ -10,8 +9,10 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/flopp/go-findfont"
 	"image/color"
+	"log"
 	"os"
 	"strings"
+	"tool/data"
 )
 
 func main() {
@@ -33,14 +34,80 @@ func makeMainWindow(mainApp fyne.App) fyne.Window {
 	mainWindow.SetMainMenu(makeMainMenu(mainApp, mainWindow))
 
 	//todo left tree
-	text := canvas.NewText("xxxx", color.Black)
+	//text := canvas.NewText("xxxx", color.Black)
 	text2 := canvas.NewText("xxxx", color.Black)
 
-	split := container.NewHSplit(text, text2)
+	split := container.NewHSplit(makeMenuTree(), text2)
 
 	mainWindow.SetContent(split)
 
 	return mainWindow
+}
+
+func makeMenuTree() fyne.CanvasObject {
+	tree := &widget.Tree{
+		BaseWidget: widget.BaseWidget{},
+		//Root:       "",
+		ChildUIDs: func(uid string) (c []string) {
+			c = data.MenuTree[uid]
+			return c
+		},
+		CreateNode: func(branch bool) (o fyne.CanvasObject) {
+			return widget.NewLabel("tree123456")
+		},
+		IsBranch: func(uid string) (ok bool) {
+			children, ok := data.MenuTree[uid]
+			return ok && len(children) > 0
+		},
+		OnBranchClosed: nil,
+		OnBranchOpened: nil,
+		OnSelected: func(uid widget.TreeNodeID) {
+			log.Println(uid)
+		},
+		OnUnselected: nil,
+		UpdateNode: func(uid widget.TreeNodeID, branch bool, node fyne.CanvasObject) {
+			node.(*widget.Label).SetText(uid)
+		},
+	}
+	/*data := map[string][]string{
+		"":  {"A"},
+		"A": {"B", "D", "H", "J", "L", "O", "P", "S", "V"},
+		"B": {"C"},
+		"C": {"abc"},
+		"D": {"E"},
+		"E": {"F", "G"},
+		"F": {"adef"},
+		"G": {"adeg"},
+		"H": {"I"},
+		"I": {"ahi"},
+		"O": {"ao"},
+		"P": {"Q"},
+		"Q": {"R"},
+		"R": {"apqr"},
+		"S": {"T"},
+		"T": {"U"},
+		"U": {"astu"},
+		"V": {"W"},
+		"W": {"X"},
+		"X": {"Y"},
+		"Y": {"Z"},
+		"Z": {"avwxyz"},
+	}
+
+	tree := widget.NewTreeWithStrings(data)
+	tree.OnSelected = func(id string) {
+		fmt.Println("Tree node selected:", id)
+	}
+	tree.OnUnselected = func(id string) {
+		fmt.Println("Tree node unselected:", id)
+	}
+	tree.OpenBranch("A")
+	tree.OpenBranch("D")
+	tree.OpenBranch("E")
+	tree.OpenBranch("L")
+	tree.OpenBranch("M")*/
+
+	return container.NewBorder(nil, nil, nil, nil, tree)
 }
 
 func makeMainMenu(a fyne.App, w fyne.Window) *fyne.MainMenu {
@@ -69,7 +136,7 @@ func makeAboutMenu() *fyne.Menu {
 func init() {
 	fontPaths := findfont.List()
 	for _, path := range fontPaths {
-		fmt.Println(path)
+		//fmt.Println(path)
 		//楷体:simkai.ttf
 		//黑体:simhei.ttf
 		//YaHei.ttf
@@ -78,5 +145,5 @@ func init() {
 			break
 		}
 	}
-	fmt.Println("=============")
+	//fmt.Println("=============")
 }
