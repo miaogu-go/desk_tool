@@ -25,9 +25,9 @@ var (
 			Title: "时间戳转换",
 			View:  unix_time.UnixTime,
 		},
-		"encode":{
+		"encode": {
 			Title: "编解码",
-			View:
+			View:  nil,
 		},
 	}
 
