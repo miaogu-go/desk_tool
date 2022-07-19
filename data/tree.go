@@ -22,12 +22,16 @@ var (
 			SupportWeb: true,
 		},
 		"unixTime": {
-			Title: "UnixTime",
+			Title: "时间戳转换",
 			View:  unix_time.UnixTime,
+		},
+		"encode":{
+			Title: "编解码",
+			View:
 		},
 	}
 
 	Menus = map[string][]string{
-		"": {"introduce", "unixTime"},
+		"": {"introduce", "unixTime", "encode"},
 	}
 )
