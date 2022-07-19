@@ -2,6 +2,7 @@ package data
 
 import (
 	"fyne.io/fyne/v2"
+	"tool/data/unix_time"
 )
 
 type ScreenRenderHandle func(w fyne.Window) fyne.CanvasObject
@@ -22,7 +23,7 @@ var (
 		},
 		"unixTime": {
 			Title: "UnixTime",
-			View:  _unixTime,
+			View:  unix_time.UnixTime,
 		},
 	}
 
