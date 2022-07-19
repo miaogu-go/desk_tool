@@ -13,7 +13,7 @@ import (
 	"tool/data"
 )
 
-type SetRightContHandle func(cont data.Content)
+type RightViewHandle func(cont data.Content)
 
 func main() {
 	mainApp := app.New()
@@ -26,7 +26,7 @@ func main() {
 func makeMainWindow(mainApp fyne.App) fyne.Window {
 	mainWindow := mainApp.NewWindow("tools")
 	//设置窗口大小
-	mainWindow.Resize(fyne.NewSize(500, 500))
+	mainWindow.Resize(fyne.NewSize(700, 500))
 	mainWindow.CenterOnScreen()
 	//设置主窗口
 	mainWindow.SetMaster()
@@ -34,21 +34,21 @@ func makeMainWindow(mainApp fyne.App) fyne.Window {
 	mainWindow.SetMainMenu(makeMainMenu(mainApp, mainWindow))
 
 	rightCont := container.NewMax()
-	setRightCont := func(cont data.Content) {
+	viewHandle := func(cont data.Content) {
 		view := cont.View(mainWindow)
 		rightCont.Objects = []fyne.CanvasObject{view}
 		rightCont.Refresh()
 	}
 
 	rightContent := container.NewBorder(nil, nil, nil, nil, rightCont)
-	split := container.NewHSplit(makeMenuTree(setRightCont), rightContent)
+	split := container.NewHSplit(makeMenuTree(viewHandle), rightContent)
 
 	mainWindow.SetContent(split)
 
 	return mainWindow
 }
 
-func makeMenuTree(contHandle SetRightContHandle) fyne.CanvasObject {
+func makeMenuTree(viewHandle RightViewHandle) fyne.CanvasObject {
 	tree := &widget.Tree{
 		BaseWidget: widget.BaseWidget{},
 		Root:       "",
@@ -71,10 +71,14 @@ func makeMenuTree(contHandle SetRightContHandle) fyne.CanvasObject {
 				log.Println("content is not exist", uid)
 				return
 			}
-			contHandle(content)
+			viewHandle(content)
 		},
 		OnUnselected: nil,
 		UpdateNode: func(uid widget.TreeNodeID, branch bool, node fyne.CanvasObject) {
+			if cont, ok := data.Contents[uid]; ok {
+				node.(*widget.Label).SetText(cont.Title)
+				return
+			}
 			node.(*widget.Label).SetText(uid)
 		},
 	}
