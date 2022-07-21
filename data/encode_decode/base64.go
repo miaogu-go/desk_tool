@@ -1,6 +1,7 @@
 package encode_decode
 
 import (
+	"encoding/base64"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
@@ -32,6 +33,7 @@ func (b *base64EncodeDe) encodeButton() fyne.CanvasObject {
 			log.Printf("encodeButton in is empty")
 			return
 		}
+		encodeStr := base64.StdEncoding.EncodeToString([]byte(inStr))
 	})
 	return b.out
 }
