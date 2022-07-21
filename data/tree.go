@@ -2,6 +2,7 @@ package data
 
 import (
 	"fyne.io/fyne/v2"
+	"tool/data/encode_decode"
 	"tool/data/unix_time"
 )
 
@@ -27,7 +28,7 @@ var (
 		},
 		"encode": {
 			Title: "编解码",
-			View:  nil,
+			View:  encode_decode.EncodeDecode,
 		},
 	}
 

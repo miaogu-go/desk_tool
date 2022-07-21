@@ -22,7 +22,7 @@ func New() *unixTime {
 }
 
 //layout unix time 界面整体布局
-func (u *unixTime) layout() *fyne.Container {
+func (u *unixTime) layout() fyne.CanvasObject {
 	u.containers = append(u.containers, buildCurrentTime(), buildUnixToDateStr(), buildDateToUnixStr())
 	return container.NewVBox(u.containers...)
 }
