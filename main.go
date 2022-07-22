@@ -8,6 +8,8 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/flopp/go-findfont"
 	"log"
+	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"strings"
 	"tool/data"
@@ -18,6 +20,9 @@ type RightViewHandle func(cont data.Content)
 func main() {
 	mainApp := app.New()
 	mw := makeMainWindow(mainApp)
+	go func() {
+		log.Println(http.ListenAndServe(":6060", nil))
+	}()
 	mw.ShowAndRun()
 
 	os.Unsetenv("FYNE_FONT")
