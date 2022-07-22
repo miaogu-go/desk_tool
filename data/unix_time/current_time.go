@@ -6,7 +6,6 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/widget"
-	"github.com/atotto/clipboard"
 	"log"
 	"time"
 	"tool/tool"
@@ -76,10 +75,7 @@ func (u *currentTime) copyButton() fyne.CanvasObject {
 			log.Printf("_currentTime get currentTime err:%s", err.Error())
 			return
 		}
-		err = clipboard.WriteAll(currentTimeStr)
-		if err != nil {
-			log.Printf("_currentTime copyButton err:%s", err.Error())
-		}
+		tool.Copy(currentTimeStr)
 	})
 
 	return copyButton

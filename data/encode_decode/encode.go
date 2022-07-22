@@ -1,6 +1,9 @@
 package encode_decode
 
-import "fyne.io/fyne/v2"
+import (
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
+)
 
 func EncodeDecode(window fyne.Window) fyne.CanvasObject {
 	e := New()
@@ -18,5 +21,6 @@ func New() *encodeDecode {
 }
 
 func (e *encodeDecode) layout() fyne.CanvasObject {
-
+	e.containers = append(e.containers, buildEncode())
+	return container.NewVBox(e.containers...)
 }
