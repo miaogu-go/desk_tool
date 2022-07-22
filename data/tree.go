@@ -17,7 +17,7 @@ type Content struct {
 var (
 	Contents = map[string]Content{
 		"introduce": {
-			Title:      "Introduce",
+			Title:      "介绍",
 			Intro:      "this is welcome",
 			View:       _welcome,
 			SupportWeb: true,

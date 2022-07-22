@@ -12,6 +12,7 @@ var (
 `
 	funcDesc = `
 * 时间戳转换工具
+* base64/url 编解码
 `
 )
 
