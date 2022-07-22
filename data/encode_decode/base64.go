@@ -33,6 +33,7 @@ func (b *base64EncodeDe) input() fyne.CanvasObject {
 func (b *base64EncodeDe) output() fyne.CanvasObject {
 	b.out = widget.NewMultiLineEntry()
 	b.out.SetMinRowsVisible(8)
+	b.out.Disable()
 	return b.out
 }
 

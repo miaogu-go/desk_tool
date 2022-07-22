@@ -21,6 +21,6 @@ func New() *encodeDecode {
 }
 
 func (e *encodeDecode) layout() fyne.CanvasObject {
-	e.containers = append(e.containers, buildEncode())
+	e.containers = append(e.containers, buildEncode(), buildUrlEncode())
 	return container.NewVBox(e.containers...)
 }
